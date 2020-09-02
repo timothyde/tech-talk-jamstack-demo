@@ -1,7 +1,17 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
+const path = require(`path`)
+const pokemons = require(path.resolve(`src/pokemons.json`))
 
-// You can delete this file if you're not using it
+exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
+  pokemons.forEach(pokemon => {
+    const node = {
+      name: pokemon.name,
+      type: pokemon.type,
+      id: createNodeId(`Pokemon-${pokemon.name}`),
+      internal: {
+        type: "Pokemon",
+        contentDigest: createContentDigest(pokemon),
+      },
+    }
+    actions.createNode(node)
+  })
+}
